@@ -1,0 +1,2 @@
+# RazzBot
+Discord bot
