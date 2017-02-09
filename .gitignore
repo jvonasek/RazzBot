@@ -1,0 +1,17 @@
+local.js
+dist/
+
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+temp
+*.fuse*
+.AppleDouble/
+
+bower_components/
+node_modules/
+
