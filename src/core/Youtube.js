@@ -4,6 +4,7 @@ module.exports = class Youtube {
 
   constructor() {
     this.voiceConnectionInfo = {};
+    this.encoder = {};
     this.queue = [];
     this.isPlaying = false;
   }
@@ -11,9 +12,8 @@ module.exports = class Youtube {
   /**
    * Retrieves media information from youtube url, then starts playing audio.
    *
-   * @param      {string}    youtubeUrl
-   * @param      {object}    info
-   * @param      {Function}  callback
+   * @param      {string}  youtubeUrl
+   * @param      {object}  info
    */
   playAudio(youtubeUrl, info) {
 
@@ -36,7 +36,6 @@ module.exports = class Youtube {
 
   }
 
-
   /**
    * Sets the voice connection information.
    *
@@ -46,7 +45,6 @@ module.exports = class Youtube {
     this.voiceConnectionInfo = voiceConnectionInfo;
   }
 
-
   /**
    * Gets the voice connection information.
    *
@@ -55,7 +53,6 @@ module.exports = class Youtube {
   getVoiceConnectionInfo() {
     return this.voiceConnectionInfo;
   }
-
 
   /**
    * Adds item to the queue.
@@ -73,9 +70,8 @@ module.exports = class Youtube {
     this.queue.shift();
   }
 
-
   /**
-   * Returns the queue
+   * Returns the queue.
    *
    * @return     {array}
    */
@@ -83,6 +79,12 @@ module.exports = class Youtube {
     return this.queue;
   }
 
+  /**
+   * Clears the queue.
+   */
+  clearQueue() {
+    this.queue = [];
+  }
 
   /**
    * Skips item in the queue.
@@ -91,7 +93,6 @@ module.exports = class Youtube {
     this.shiftQueue();
     this.playQueue(true);
   }
-
 
   /**
    * Plays the queue.
@@ -102,12 +103,17 @@ module.exports = class Youtube {
     if (this.queue.length > 0 && (!this.isPlaying || skip)) {
       let voiceConnectionInfo = this.getVoiceConnectionInfo();
       let bestAudio = this.getBestAudioFormat(this.queue[0].formats);
-      let encoder = this.createEncoder(bestAudio.url, voiceConnectionInfo);
 
-      encoder.play();
+      if (Object.keys(this.encoder).length) {
+        this.encoder.destroy();
+      }
+
+      this.encoder = this.createEncoder(bestAudio.url, voiceConnectionInfo);
+      this.encoder.play();
       this.isPlaying = true;
 
-      encoder.once('end', () => {
+
+      this.encoder.on('end', () => {
         this.isPlaying = false;
         this.shiftQueue();
         setTimeout(() => this.playQueue(voiceConnectionInfo), 1000);
@@ -142,7 +148,6 @@ module.exports = class Youtube {
       outputArgs: ['-af', 'volume=0.5'],
     });
   }
-
 
   /**
    * Determines if youtube url is valid.

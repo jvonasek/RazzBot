@@ -24,9 +24,7 @@ module.exports = class Play extends AbstractCommand {
       let args = this.getArgs();
       this.startPlaying(args._[1]);
     }
-
   }
-
 
   /**
    * Joins voice channel if available.
@@ -52,24 +50,28 @@ module.exports = class Play extends AbstractCommand {
     }
   }
 
-
   /**
    * Prints the youtube queue in the channel.
    *
    * @param      {object}  queue
    */
   printQueue(queue) {
-    let queueMessage = [
-      'Current queue:'
-    ];
-    queue.forEach(item => {
-      queueMessage.push(`${item.title} - ${item.author}`);
+    let queueMessage = [];
+
+    if (queue.length) {
+      this.channel.sendMessage('Current queue:')
+    } else {
+      this.channel.sendMessage('Queue is empty.');
+      return;
+    }
+
+    queue.forEach((item, index) => {
+      queueMessage.push(`${index+1}. ${item.title} - ${item.author}`);
     });
 
-    this.channel.sendMessage('`' + queueMessage.join('\n') + '`');
+    this.channel.sendMessage(queueMessage.join('\n'));
 
   }
-
 
   /**
    * Processes subcommands.
@@ -84,6 +86,12 @@ module.exports = class Play extends AbstractCommand {
       case '!queue':
         this.printQueue(yt.getQueue());
         break;
+      case '!stop':
+        yt.clearQueue();
+        this.voiceChannel.leave();
+        break;
+      default:
+        console.log('Subcommand "%s" is not implemented.', subcommand);
     }
   }
 
