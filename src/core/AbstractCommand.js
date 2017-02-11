@@ -1,5 +1,5 @@
-var minimist  = require('minimist');
-var spawnargs = require('spawn-args');
+let minimist  = require('minimist');
+let spawnargs = require('spawn-args');
 
 module.exports = class AbstractCommand {
 
@@ -17,11 +17,11 @@ module.exports = class AbstractCommand {
    *
    * @param      {object}  message
    */
-  exec(message) {
+  exec(message, subcommand) {
     this.setProps(message);
   }
 
-  getArgs(content) {
+  getArgs() {
     return minimist(spawnargs(this.message.content));
   }
 

@@ -1,4 +1,12 @@
 module.exports = {
-  'Say': '!say',
-  'Play': '!play'
+  'Play': {
+    trigger: '!play',
+    subcommands: [
+      '!skip',
+      '!queue'
+    ]
+  },
+  'Say': {
+    trigger: '!say'
+  }
 }

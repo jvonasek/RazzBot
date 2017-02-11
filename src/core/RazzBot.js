@@ -23,8 +23,16 @@ module.exports = class RazzBot {
     let content = message.content.toLowerCase();
 
     _.each(this.commands, (command, moduleName) => {
-      if (content.indexOf(command) === 0) {
+
+      // find main module trigger
+      if (content.indexOf(command.trigger) === 0) {
         return callback(moduleName, message);
+      }
+
+      // find subcommands
+      let subcommandIndex = _.indexOf(command.subcommands, content);
+      if (subcommandIndex >= 0) {
+        return callback(moduleName, message, command.subcommands[subcommandIndex]);
       }
     });
   }
@@ -36,9 +44,9 @@ module.exports = class RazzBot {
    * @param      {string}  moduleName
    * @param      {object}  message
    */
-  runModule(moduleName, message) {
+  runModule(moduleName, message, subcommand) {
     try {
-      this[moduleName].exec(message);
+      this[moduleName].exec(message, subcommand);
     } catch (err) {
       console.log(err);
     }

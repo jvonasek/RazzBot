@@ -15,11 +15,16 @@ module.exports = class Play extends AbstractCommand {
    *
    * @param      {object}  message
    */
-  exec(message) {
+  exec(message, subcommand) {
     super.exec(message);
 
-    let args = this.getArgs();
-    this.startPlaying(args._[1]);
+    if (subcommand) {
+      this.processSubcommand(subcommand);
+    } else {
+      let args = this.getArgs();
+      this.startPlaying(args._[1]);
+    }
+
   }
 
 
@@ -35,7 +40,7 @@ module.exports = class Play extends AbstractCommand {
       this.voiceChannel.join().then(info => {
 
         // check if youtube url is valid
-        if (yt.isYoutubeUrlValid(youtubeUrl)) {
+        if (youtubeUrl && yt.isYoutubeUrlValid(youtubeUrl)) {
           yt.playAudio(youtubeUrl, info);
         } else {
           this.channel.sendMessage('You must pass valid youtube url.');
@@ -44,6 +49,41 @@ module.exports = class Play extends AbstractCommand {
       });
     } else {
       this.channel.sendMessage('You are not in a voice channel.');
+    }
+  }
+
+
+  /**
+   * Prints the youtube queue in the channel.
+   *
+   * @param      {object}  queue
+   */
+  printQueue(queue) {
+    let queueMessage = [
+      'Current queue:'
+    ];
+    queue.forEach(item => {
+      queueMessage.push(`${item.title} - ${item.author}`);
+    });
+
+    this.channel.sendMessage('`' + queueMessage.join('\n') + '`');
+
+  }
+
+
+  /**
+   * Processes subcommands.
+   *
+   * @param      {string}  subcommand
+   */
+  processSubcommand(subcommand) {
+    switch(subcommand) {
+      case '!skip':
+        yt.skip();
+        break;
+      case '!queue':
+        this.printQueue(yt.getQueue());
+        break;
     }
   }
 

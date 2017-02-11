@@ -18,9 +18,9 @@ client.Dispatcher.on(Events.GATEWAY_READY, e => {
 });
 
 client.Dispatcher.on(Events.MESSAGE_CREATE, e => {
-  RazzBot.checkMessageForCommand(e.message, (moduleName, message) => {
+  RazzBot.checkMessageForCommand(e.message, (moduleName, message, isSubcommand) => {
     if (moduleName) {
-      RazzBot.runModule(moduleName, message);
+      RazzBot.runModule(moduleName, message, isSubcommand);
     }
   });
 });
