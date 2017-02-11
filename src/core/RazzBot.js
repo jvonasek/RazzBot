@@ -14,7 +14,7 @@ module.exports = class RazzBot {
 
   /**
    * Checks the given message for command,
-   * proceeds to run a callback, if the command is valid-
+   * proceeds to run a callback, if the command is valid.
    *
    * @param      {object}    message
    * @param      {Function}  callback

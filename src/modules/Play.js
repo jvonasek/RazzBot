@@ -1,34 +1,47 @@
-let Command = require('../core/Command');
+let AbstractCommand = require('../core/AbstractCommand');
 let Youtube = require('../core/Youtube');
 
-module.exports = class Play extends Command {
+const yt = new Youtube;
+
+module.exports = class Play extends AbstractCommand {
+
   constructor() {
     super();
-
-    this.Youtube = new Youtube;
   }
 
 
   /**
-   * Executes command for given message
+   * Executes command for given message.
    *
    * @param      {object}  message
    */
   exec(message) {
     super.exec(message);
 
-    this.startPlaying();
+    let args = this.getArgs();
+    this.startPlaying(args._[1]);
   }
 
 
   /**
    * Joins voice channel if available.
-   * Stars playing passed youtube url
+   * Stars playing passed youtube url.
+   *
+   * @param      {string}  youtubeUrl
    */
-  startPlaying() {
+  startPlaying(youtubeUrl) {
     if (this.voiceChannel) {
-      // TODO pass youtube url from message
-      this.voiceChannel.join().then(info => this.Youtube.playAudio('https://www.youtube.com/watch?v=KfmQuavvs9w', info));
+      // join voice channel
+      this.voiceChannel.join().then(info => {
+
+        // check if youtube url is valid
+        if (yt.isYoutubeUrlValid(youtubeUrl)) {
+          yt.playAudio(youtubeUrl, info);
+        } else {
+          this.channel.sendMessage('You must pass valid youtube url.');
+        }
+
+      });
     } else {
       this.channel.sendMessage('You are not in a voice channel.');
     }

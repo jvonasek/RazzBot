@@ -1,7 +1,7 @@
-var Command = require('../core/Command');
+var AbstractCommand = require('../core/AbstractCommand');
 
 // TODO Say command
-module.exports = class Say extends Command {
+module.exports = class Say extends AbstractCommand {
   constructor() {
     super();
   }

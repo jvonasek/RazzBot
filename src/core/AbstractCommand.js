@@ -1,4 +1,8 @@
-module.exports = class Command {
+var minimist  = require('minimist');
+var spawnargs = require('spawn-args');
+
+module.exports = class AbstractCommand {
+
 	constructor() {
     this.message;
     this.channel;
@@ -14,16 +18,20 @@ module.exports = class Command {
    * @param      {object}  message
    */
   exec(message) {
-    this.setMetadata(message);
+    this.setProps(message);
+  }
+
+  getArgs(content) {
+    return minimist(spawnargs(this.message.content));
   }
 
 
   /**
-   * Sets the metadata from given message
+   * Sets the properties from given message
    *
    * @param      {object}  message
    */
-  setMetadata(message) {
+  setProps(message) {
     this.setMessage(message);
     this.setChannel(message);
     this.setAuthor(message);
