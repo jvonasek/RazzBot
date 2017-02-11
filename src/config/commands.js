@@ -7,6 +7,9 @@ module.exports = {
       '!queue'
     ]
   },
+  'Joke': {
+    trigger: '!joke'
+  },
   'Say': {
     trigger: '!say'
   }

@@ -1,14 +1,16 @@
 let _      = require('underscore');
 
 let config = require('../config');
-let Say    = require('../modules/Say');
 let Play   = require('../modules/Play');
+let Joke   = require('../modules/Joke');
+let Say    = require('../modules/Say');
 
 module.exports = class RazzBot {
   constructor() {
     this.commands = config.commands;
-    this.Say = new Say;
     this.Play = new Play;
+    this.Joke = new Joke;
+    this.Say = new Say;
   }
 
 
