@@ -2,6 +2,8 @@ let request         = require('superagent');
 
 let AbstractCommand = require('../core/AbstractCommand');
 
+const JOKE_API_URL = 'https://icanhazdadjoke.com/';
+
 module.exports = class Joke extends AbstractCommand {
   constructor() {
     super();
@@ -9,11 +11,12 @@ module.exports = class Joke extends AbstractCommand {
 
   exec(message) {
     super.exec(message)
+
     request
-      .get('https://icanhazdadjoke.com/')
+      .get(JOKE_API_URL)
       .set('Accept', 'text/plain')
       .end((err, res) => {
         this.channel.sendMessage(`*${res.text}*`);
-      })
+      });
   }
 }

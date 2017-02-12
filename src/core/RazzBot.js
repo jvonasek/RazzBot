@@ -4,15 +4,17 @@ let config = require('../config');
 let Play   = require('../modules/Play');
 let Joke   = require('../modules/Joke');
 let Say    = require('../modules/Say');
+let Member = require('../modules/Member');
 
 module.exports = class RazzBot {
   constructor() {
     this.commands = config.commands;
-    this.Play = new Play;
-    this.Joke = new Joke;
-    this.Say = new Say;
-  }
 
+    this.Play = new Play();
+    this.Joke = new Joke();
+    this.Say = new Say();
+    this.Member = new Member(config);
+  }
 
   /**
    * Checks the given message for command,
@@ -39,12 +41,12 @@ module.exports = class RazzBot {
     });
   }
 
-
   /**
    * Runs the module based on given module name.
    *
    * @param      {string}  moduleName
    * @param      {object}  message
+   * @param      {string}  subcommand
    */
   runModule(moduleName, message, subcommand) {
     try {

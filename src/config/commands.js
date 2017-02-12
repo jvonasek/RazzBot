@@ -10,6 +10,9 @@ module.exports = {
   'Joke': {
     trigger: '!joke'
   },
+  'Member': {
+    trigger: '!member'
+  },
   'Say': {
     trigger: '!say'
   }
